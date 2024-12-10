@@ -16,13 +16,17 @@ read.flow <- function(file){
   #   note that warn=FALSE, meaning it won't warn us of an
   #   incomplete final line, which is common
   d <- readLines(file, warn = FALSE)
-  d <- d[2:length(d)] #remove first line
+
+  #remove first line, which is the column headers
+  d <- d[2:length(d)]
+  
   # split each string into a list
-  ss <- strsplit(d, split = ',')
-  ssflow <- ss  
+  ssflow <- strsplit(d, split = ',')
+  
   # now start getting relevant items out of the lines
   # date time
   date <- unlist(lapply(ssflow, function(k) k[1]))
+  
   # format it 
   time <- as.POSIXct(date, tz = 'UTC')
   # flow data
@@ -33,11 +37,13 @@ read.flow <- function(file){
   # Fin2 <- replace(Fin, Fin == 0, 999)           # Replace values
   
   # put time and flow data together
-  df <- data.frame(time = time,
-                   Flow_intake = as.numeric(F1),
-                   Flow_TSG = as.numeric(F2),
-                   Flow_PCO = as.numeric(F3)
-                    )
+  df <- data.frame(
+    time = time,
+    Flow_intake = as.numeric(F1),
+    Flow_TSG = as.numeric(F2),
+    Flow_PCO = as.numeric(F3)
+    )
+  
   df
   
 }

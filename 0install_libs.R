@@ -1,0 +1,12 @@
+install.packages('oce')
+install.packages('ocedata')
+install.packages('ggplot2')
+install.packages('sf')
+install.packages("terra")
+install.packages("lubridate")
+install.packages("readr")
+
+install.packages('remotes')
+library(remotes)
+remotes::install_github(repo = "clayton33/csasAtlPhys", ref = "master")
+install.packages('csasAtlPhys')

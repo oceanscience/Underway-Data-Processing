@@ -44,11 +44,16 @@
 rm(list=ls()) #remove everything in the working environment.
 
 #enter cruise number
-missionnum <- "xxxyyyy000"
+missionnum <- Sys.getenv("Cruise_Number")
 
-#enter map boundary limits used by plots in the function plot.tsg
-lonlim <- c(-72,-55)
-latlim <- c(40,48)
+#Map boundary limits used by plots in the function plot.tsg
+min_lat <- as.numeric(Sys.getenv("Min_Lat")) 
+min_lon <- as.numeric(Sys.getenv("Min_Lon"))
+max_lat <- as.numeric(Sys.getenv("Max_Lat"))
+max_lon <- as.numeric(Sys.getenv("Max_Lon"))
+
+lonlim <- c(min_lon, max_lon)
+latlim <- c(min_lat, max_lat)
 
 #Install and load specific package versions
 #install.packages("oce", "ocedata", "ggplot2")
@@ -57,13 +62,26 @@ library(ocedata)
 library(ggplot2)
 data("coastlineWorldFine")
 
-#set working directory
-setwd("C:/TSG_process") # set working directory
-#wd <- getwd()
-#setwd(wd)
-parent <- getwd()
-pathprocessed = "processed/" # path with processed output files 
-pathfunctions = "2code_interp_plot_TSGdata/"
+# this is the directory where R expects to find the local code
+# e.g "1code_readTSGdata/readflowdata.R"
+source_code_directory <- getwd()
+
+# path where raw TSG files Read exist
+pathrawdata <- Sys.getenv("TSG_Input_Directory")
+
+# path to where we want the processed files to end up
+pathprocessed <- Sys.getenv("Processed_Directory")
+
+# if the processed directory doesn't already exist create it
+if(!dir.exists(file.path(pathprocessed))) {
+  dir.create(file.path(pathprocessed))
+}
+
+# Create the directory where intermediate hourly plots and data will be stored 
+hourly_processed_data <- file.path(pathprocessed, "2code_interp_plot_TSGdata", "hourly_TSG_dataplots")
+if(!dir.exists(hourly_processed_data)) {
+  dir.create(hourly_processed_data, recursive = TRUE)
+}
 
 # function file names
 source("2code_interp_plot_TSGdata/interpTSGhourly.R")
@@ -76,39 +94,70 @@ filespco2 <- list.files(path= pathprocessed, pattern = 'PCO2data.*\\.csv', full.
 filestsg <- list.files(path= pathprocessed, pattern = 'TSGdata.*\\.csv', full.names = TRUE)
 filesnmea <- list.files(path= pathprocessed, pattern = 'TSGposition.*\\.csv', full.names = TRUE)
 
-#determine the latest start date/time from all files
-tsgall <- data.frame(read.csv(filestsg[1], header = TRUE))
-flowall <- data.frame(read.csv(filesflow[1], header = TRUE))
-pco2all <- data.frame(read.csv(filespco2[1], header = TRUE))
-nmeaall <- data.frame(read.csv(filesnmea[1], header = TRUE))
+max_date = "9999-12-31 23:59:59.999"
 
-start_date <- max(tsgall$time[1], flowall$time[1],pco2all$time[1],nmeaall$time[1])
+t_tgall = -1
+t_tgalle = max_date
+
+t_flowall = -1
+t_flowalle = max_date
+
+t_pco2all = -1
+t_pco2alle = max_date
+
+t_nmeaall = -1
+t_nmeaalle = max_date
+
+#determine the latest start date/time from all files
+if(length(filestsg) > 0) {
+  tsgall <- data.frame(read.csv(filestsg[1], header = TRUE))
+  t_tgall = if(exists("tsgall")) tsgall$time[1]
+  
+  tsgalle <- data.frame(read.csv(filestsg[length(filestsg)], header = TRUE))
+  t_tgalle = if(exists("tsgalle")) tsgalle$time[length(tsgalle$time)]
+}
+
+if(length(filesflow) > 0) {
+  flowall <- data.frame(read.csv(filesflow[1], header = TRUE))
+  t_flowall = if( exists("flowall")) flowall$time[1]
+  
+  flowalle <- data.frame(read.csv(filesflow[length(filesflow)], header = TRUE))
+  t_flowalle = if( exists("flowalle")) flowalle$time[length(flowalle$time)]
+}
+
+if(length(filespco2) > 0) {
+  pco2all <- data.frame(read.csv(filespco2[1], header = TRUE))
+  t_pco2all = if( exists("pco2all")) pco2all$time[1]
+  
+  pco2alle <- data.frame(read.csv(filespco2[length(filespco2)], header = TRUE))
+  t_pco2alle = if( exists("pco2alle")) pco2alle$time[length(pco2alle$time)]
+}
+
+if(length(filesnmea) > 0) {
+  nmeaall <- data.frame(read.csv(filesnmea[1], header = TRUE))
+  t_nmeaall = if( exists("nmeaall")) nmeaall$time[1]
+  
+  nmeaalle <- data.frame(read.csv(filesnmea[length(filesnmea)], header = TRUE))
+  t_nmeaalle = if( exists("nmeaalle")) nmeaalle$time[length(nmeaalle$time)]
+}
+
+start_date <- max(t_tgall, t_flowall, t_pco2all, t_nmeaall)
 start_date <- round(as.POSIXct(start_date,tz = 'UTC'),"hour") # round to nearest hour
 
 #determine the earliest end date/time from all files
-tsgalle <- data.frame(read.csv(filestsg[length(filestsg)], header = TRUE))
-flowalle <- data.frame(read.csv(filesflow[length(filesflow)], header = TRUE))
-pco2alle <- data.frame(read.csv(filespco2[length(filespco2)], header = TRUE))
-nmeaalle <- data.frame(read.csv(filesnmea[length(filesnmea)], header = TRUE))
-
-end_date <- min(tsgalle$time[length(tsgalle$time)], flowalle$time[length(flowalle$time)],pco2alle$time[length(pco2alle$time)],nmeaalle$time[length(nmeaalle$time)])
-  
-# frequency of data collection
-freq <- data.frame(frequency(tsgall$time),frequency(flowall$time),frequency(pco2all$time),frequency(nmeaall$time) )
+end_date <- min(t_tgalle, t_flowalle, t_pco2alle, t_nmeaalle)
 
 # vector of time by hour between start and end time determined above
 hourrate <- seq(from = as.POSIXct(start_date,tz = 'UTC'), to = as.POSIXct(end_date,tz = 'UTC'), by = "hour")
 
 # read each processed file and interpolate each variable hourly and save in individual csv files and 
 # plots time series of each variable using the function assemble.tsg
-assemble.TSG(filesflow, hourrate, missionnum)
-assemble.TSG(filespco2, hourrate,missionnum)
-assemble.TSG(filestsg, hourrate,missionnum)
-assemble.TSG(filesnmea, hourrate,missionnum)
+if(length(filestsg) > 0) assemble.TSG(hourly_processed_data, filestsg, hourrate, missionnum)
+if(length(filesnmea) > 0) assemble.TSG(hourly_processed_data, filesnmea, hourrate, missionnum)
+if(length(filesflow) > 0) assemble.TSG(hourly_processed_data, filesflow, hourrate, missionnum)
+if(length(filespco2) > 0) assemble.TSG(hourly_processed_data, filespco2, hourrate, missionnum)
 
-# read each hourly interpolated file created above and assemble all variables into 
-# 1 file named xxxyyy000_TSG_hourly.csv 
-filesinterp <- list.files(path= "2code_interp_plot_TSGdata/hourly_TSG_dataplots", pattern = 'TSG_.*\\.csv', full.names = TRUE)
+filesinterp <- list.files(path=hourly_processed_data, pattern = 'TSG_.*\\.csv', full.names = TRUE)
 interpdataall <- data.frame(read.csv(filesinterp[1], header = TRUE))
 filesinterp2 <- filesinterp[2:length(filesinterp)]
 
@@ -119,7 +168,7 @@ for (i in filesinterp2){
   coln2 <- colnames(interpdataall) #Get the column name
   
   interpdataall <- cbind(interpdataall, tsginterpall[,3])# add new column
-  colnames(interpdataall)<-c(coln2,cc) #adding name
+  colnames(interpdataall)<-c(coln2, cc) #adding name
 }
 
 interpdataall$Conductivity_S_m[interpdataall$Conductivity_S_m > 959]<- NA
@@ -128,16 +177,18 @@ interpdataall$salinity_PSU[interpdataall$salinity_PSU > 959]<- NA
 interpdataall$O2Concentration_ml_L[interpdataall$O2Concentration_ml_L < 0.5]<- NA
 interpdataall$O2Concentration_ml_L[interpdataall$O2Concentration_ml_L > 15]<- NA
 
-#write a csv with all variables interpolated hourly 
-filename <- paste0("2code_interp_plot_TSGdata/hourly_TSG_dataplots/",missionnum,"_TSG_hourly.csv")
-write.csv(interpdataall, file = filename,row.names = FALSE)
+#write a csv with all variables interpolated hourly
+filename <- paste0(missionnum,"_TSG_hourly.csv")
+output_file <- file.path(hourly_processed_data, filename)
+write.csv(interpdataall, file=output_file, row.names = FALSE)
 
 # plot each variable vs longitude, plot station locations and 
 # longitude and latitude limits for plots (lonlim,latlim)
 
-plot.tsg(interpdataall,lonlim,latlim)
+plot.tsg(hourly_processed_data, interpdataall, lonlim, latlim)
 
 # Record session information
-sink("session_info.txt")
+sink_dir <- file.path(hourly_processed_data, 'session_info2.txt')
+sink(sink_dir)
 sessionInfo()
 sink()

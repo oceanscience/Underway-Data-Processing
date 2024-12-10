@@ -83,16 +83,21 @@ library(oce)
 #CTD pressure for comparison with TSG intake depth, typically between 4 - 8 m
 CTDpres <- 7
 
-#set working directory
-setwd("C:/TSG_process") # set working directory
-#wd <- getwd()
-#setwd(wd)
-parent <- getwd()
-pathprocessed = "processed/" # path with processed output files
-pathout = "4comparesamples/"
-pathelog= "elog/"
-pathbottle="bottle/"
-pathctd="ctd/"
+# this is the directory where R expects to find the local code
+# e.g "1code_readTSGdata/readflowdata.R"
+source_code_directory <- getwd()
+
+# path to where we want the processed files to end up
+pathprocessed <- Sys.getenv("Processed_Directory")
+
+pathout = file.path(pathprocessed, "4comparesamples")
+if(!dir.exists(file.path(pathout))) {
+  dir.create(file.path(pathout), recursive = TRUE)
+}
+
+pathelog<- Sys.getenv("Elog_Directory")
+pathctd <- Sys.getenv("ODF_Directory")
+samples_directory <- Sys.getenv("ODF_Directory")
 
 #List of Functions
 source("4comparesamples/read_elog_tsg3.R")
@@ -102,10 +107,10 @@ source("4comparesamples/tsg_ctd.R")
 source("4comparesamples/ctd_tsg_compare4.R")
 
 # read and process data
-read.elog_tsg(pathelog,pathbottle)
-read.elog_tsg_pco2(pathelog,pathprocessed,pathbottle)
+read.elog_tsg(pathout, pathelog, samples_directory)
+read.elog_tsg_pco2(pathelog, pathprocessed, samples_directory)
 read.addPCO2(pathprocessed) 
-read.tsg_ctd(pathctd,CTDpres)
+read.tsg_ctd(pathctd, CTDpres)
 read.ctd_tsg_compare4(pathprocessed)
 
 # Record session information
