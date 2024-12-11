@@ -40,10 +40,16 @@ library(csasAtlPhys)
 
 # this is the directory where R expects to find the local code
 # e.g "1code_readTSGdata/readflowdata.R"
-source_code_directory <- getwd()
+source_code_directory <- Sys.getenv("TSG_working_Directory")
+setwd(source_code_directory)
 
 # path where raw TSG files Read exist
 pathrawdata <- Sys.getenv("TSG_Input_Directory")
+
+# if the raw directory doesn't already exist create it
+if(!dir.exists(file.path(pathrawdata))) {
+  dir.create(file.path(pathrawdata))
+}
 
 # path to where we want the processed files to end up
 pathprocesseddata <- Sys.getenv("Processed_Directory")
@@ -51,6 +57,12 @@ pathprocesseddata <- Sys.getenv("Processed_Directory")
 # if the processed directory doesn't already exist create it
 if(!dir.exists(file.path(pathprocesseddata))) {
   dir.create(file.path(pathprocesseddata))
+}
+
+# if directories \1code_readTSGdata doesn't exist create it
+1code_readTSGdata_out_path <- file.path(source_code_directory, "1code_readTSGdata")
+if(!dir.exists(file.path(1code_readTSGdata_out_path))) {
+    dir.create(file.path(1code_readTSGdata_out_path))
 }
 
 #List of Functions
