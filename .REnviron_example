@@ -1,6 +1,7 @@
 # Root Input and output directories
-TSG_Input_Directory="Z:\DY184-02\TSG Logs"
-Processed_Directory="Z:\DY184-02\TSG Processed"
+TSG_Input_Directory="C:\TSG_process\TSG Logs"
+Processed_Directory="C:\TSG_process\TSG Processed"
+TSG_working_Directory = "C:\TSG_process"
 
 # cruise number, dates and extents used in Stage 2 & 3
 Cruise_Number="DY18402"
