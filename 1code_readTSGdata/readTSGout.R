@@ -52,23 +52,13 @@ read.tsgout <- function(file){
     sal <- 999
     sal[1:length(date)] <- 999
  }
-  if (charmatch(file, "C:/codasshared/AtSea/TSG/JC24301/raw/TSGOUT_20221005.CSV", nomatch = 0)==1) {
-    chl[12388:length(date)] <- unlist(lapply(sstsg[12388:length(date)], function(k) k[10]))
-    calphase[12388:length(date)] <- unlist(lapply(sstsg[12388:length(date)], function(k) k[11]))
-  }
-  if (charmatch(file, "C:/codasshared/AtSea/TSG/JC24301/raw/TSGOUT_20221008.CSV", nomatch = 0)==1) {
-    sal[9579:length(date)] <- unlist(lapply(sstsg[9579:length(date)], function(k) k[12]))
-    for (ii in 9579:length(date)){ 
-    cond[ii] <- as.numeric(cond[ii])*10
-    }
-  }
-  if (length(sstsg[[1]])==12) {
+ 
+   if (length(sstsg[[1]])==12) {
     chl <- unlist(lapply(sstsg, function(k) k[10]))
     calphase <- unlist(lapply(sstsg, function(k) k[11]))
     sal <- unlist(lapply(sstsg, function(k) k[12]))
     cond<- as.numeric(cond)*10
   }
-  
   
   # put time and TSG data together
   df <- data.frame(time = time,
