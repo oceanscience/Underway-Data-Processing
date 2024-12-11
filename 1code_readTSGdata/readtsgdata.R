@@ -19,18 +19,6 @@
 read.tsgdata <- function(pathrawdata, pathprocesseddata){
 
   filesTSG <- list.files(path=pathrawdata, pattern='TSGOUT.*\\.CSV', full.names = TRUE) #list of log files with path
-
-  # if the directory we'll write O2 Saturation files to doesn't exist
-  # create it
-  o2conc_out_path <- file.path(pathprocesseddata, "1code_readTSGdata")
-  if(!dir.exists(file.path(o2conc_out_path))) {
-    dir.create(file.path(o2conc_out_path))
-  }
-  
-  o2conc_out_path <- file.path(o2conc_out_path, "O2conc")
-  if(!dir.exists(file.path(o2conc_out_path))) {
-    dir.create(file.path(o2conc_out_path))
-  }
   
   for (i in filesTSG) {
     #call function to read each log file i
@@ -67,7 +55,7 @@ read.tsgdata <- function(pathrawdata, pathprocesseddata){
     rm(tsgout)
     
     # writing the o2 saturation file
-    o2conc_path <- file.path(o2conc_out_path, filename)
+    o2conc_path <- file.path("1code_readTSGdata/", filename)
     write.csv(O2_conc_sat_per, file=o2conc_path)
     rm(O2_conc_sat_per)
   }
