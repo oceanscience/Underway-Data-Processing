@@ -64,7 +64,8 @@ data("coastlineWorldFine")
 
 # this is the directory where R expects to find the local code
 # e.g "1code_readTSGdata/readflowdata.R"
-source_code_directory <- getwd()
+source_code_directory <- Sys.getenv("TSG_working_Directory")
+setwd(source_code_directory)
 
 # path where raw TSG files Read exist
 pathrawdata <- Sys.getenv("TSG_Input_Directory")
