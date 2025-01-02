@@ -35,8 +35,8 @@ read.tsgdata <- function(pathrawdata, pathprocesseddata){
     # tsgout[1:s[1],2] <- 999
     
     #creates file name to save the nmea data
-    filen <- unlist(strsplit(i, "_"))
-    filen2 <- unlist(strsplit(filen[2], "\\."))
+    filen <- unlist(strsplit(i, "TSGOUT_"))
+    filen2 <- unlist(strsplit(filen[2], ".CSV"))
     filename <- paste0("TSGdata_",filen2[1],".csv")
     
     O2_conc_sat_per <- read.tsgcalphase(tsgout) #call function to calculate O2 concentration from cal Phase
