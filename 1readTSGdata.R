@@ -60,9 +60,9 @@ if(!dir.exists(file.path(pathprocesseddata))) {
 }
 
 # if directories \1code_readTSGdata doesn't exist create it
-1code_readTSGdata_out_path <- file.path(source_code_directory, "1code_readTSGdata")
-if(!dir.exists(file.path(1code_readTSGdata_out_path))) {
-    dir.create(file.path(1code_readTSGdata_out_path))
+code_readTSGdata_out_path <- file.path(source_code_directory, "1code_readTSGdata")
+if(!dir.exists(file.path(code_readTSGdata_out_path))) {
+    dir.create(file.path(code_readTSGdata_out_path))
 }
 
 #List of Functions
