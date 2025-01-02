@@ -36,8 +36,8 @@ read.nmeadata <- function(pathrawdata, pathprocesseddata){
     cat(',  percernt NaN data = ', percentbad, "for file ",i , "\n",file = position_log_file, append = TRUE) #prints the percent of the data that has NaN to log file
     
     #creates file name to save the nmea data
-    filen <- unlist(strsplit(i, "_"))
-    filen2 <- unlist(strsplit(filen[2], "\\."))
+    filen <- unlist(strsplit(i, "NMEA_"))
+    filen2 <- unlist(strsplit(filen[2], ".CSV"))
     filename <- paste0("TSGposition_",filen2[1],".csv")
     
     #write a csv with data
