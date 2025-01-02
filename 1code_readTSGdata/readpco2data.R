@@ -20,9 +20,9 @@ read.pco2data <- function(pathrawdata, pathprocesseddata){
   
   for (i in filespco2) {
     
-    #creates file name to save the nmea data
-    filen <- unlist(strsplit(i, "_"))
-    filen2 <- unlist(strsplit(filen[2], "\\."))
+    #creates file name to save the pco2 data
+    filen <- unlist(strsplit(i, "PCO2_"))
+    filen2 <- unlist(strsplit(filen[2], ".CSV"))
     filename <- paste0("PCO2data_",filen2[1],".csv")
     
     # extract the day from file name
