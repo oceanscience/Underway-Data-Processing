@@ -79,9 +79,9 @@ if(!dir.exists(file.path(pathprocessed))) {
 }
 
 # if directories \2code_interp_plot_TSGdata path doesn't exist create it
-2code_interp_plot_TSGdatapath <- file.path(source_code_directory, "2code_interp_plot_TSGdata")
-if(!dir.exists(file.path(2code_interp_plot_TSGdatapath))) {
-    dir.create(file.path(2code_interp_plot_TSGdatapath))
+code_interp_plot_TSGdatapath <- file.path(source_code_directory, "2code_interp_plot_TSGdata")
+if(!dir.exists(file.path(code_interp_plot_TSGdatapath))) {
+    dir.create(file.path(code_interp_plot_TSGdatapath))
 }
 
 # Create the directory where intermediate hourly plots and data will be stored 
