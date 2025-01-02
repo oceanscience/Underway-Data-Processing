@@ -24,9 +24,9 @@ read.flowdata <- function(pathrawdata, pathprocesseddata){
     s <- dim(flow)
     flow[1:s[1],2] <- 999
     
-    #creates file name to save the nmea data
-    filen <- unlist(strsplit(i, "_"))
-    filen2 <- unlist(strsplit(filen[2], "\\."))
+    #creates file name to save the flow data
+    filen <- unlist(strsplit(i, "FLOW_"))
+    filen2 <- unlist(strsplit(filen[2], ".CSV"))
     filename <- paste0("FLOWdata_",filen2[1],".csv")
     
     # write a csv with data
