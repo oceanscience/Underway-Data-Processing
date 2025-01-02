@@ -19,3 +19,6 @@ End_Date=
 Elog_Directory="C:/TSG_process/elog"
 ODF_Directory="C:/TSG_process/ctd"
 Bottle_data="C:/TSG_process/bottle"
+
+#CTD pressure for comparison with TSG intake depth, typically between 4 - 8 m
+CTDpres = 7
