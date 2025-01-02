@@ -60,13 +60,8 @@ max_lon <- as.numeric(Sys.getenv("Max_Lon"))
 lonlim <- c(min_lon, max_lon)
 latlim <- c(min_lat, max_lat)
 
-# if the processed directory doesn't already exist create it
-if(!dir.exists(file.path(pathprocessed))) {
-  dir.create(file.path(pathprocessed))
-}
-
 # This directory should have been created in the 2TSG_interp.R script
-hourly_processed_data <- file.path(pathprocessed, "2code_interp_plot_TSGdata", "hourly_TSG_dataplots")
+hourly_processed_data <- file.path(source_code_directory, "2code_interp_plot_TSGdata", "hourly_TSG_dataplots")
 
 # Create the directory where intermediate hourly plots and data will be stored 
 plot_output <- file.path(source_code_directory, "3code_plot_TSGdata")
@@ -95,6 +90,7 @@ end_date <- Sys.getenv("End_Date")
 # subset the data to remove bad head or tail data from the underway dataset
 if(start_date != '') d <- subset(d, time > start_date)
 if(end_date != '') d <- subset(d, time < end_date)
+d <- subset(d, Flow_TSG > 10)
 
 lon <- d[['longitude']] * -1
 lat <- d[['latitude']]
