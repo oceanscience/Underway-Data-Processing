@@ -15,6 +15,7 @@ Max_Lon=-57.5
 Start_Date='2024-10-04 18:00:00'
 End_Date=
 
-# Elog and ODF required for Stage 4
-Elog_Directory="Z:\DY184-02\Elog\logbooks\DY18402\2024"
-ODF_Directory="Z:\DY184-02\CTD\CTD Processing\ODF"
+# Elog, bottle and ODF required for Stage 4
+Elog_Directory="C:/TSG_process/elog"
+ODF_Directory="C:/TSG_process/ctd"
+Bottle_data="C:/TSG_process/bottle"
