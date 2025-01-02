@@ -34,9 +34,8 @@
 rm(list=ls()) #remove everything in the working environment.
 
 # Install and load specific package versions
-#install.packages("oce", "csasAtlPhys")
+#install.packages("oce")
 library(oce)
-library(csasAtlPhys)
 
 # this is the directory where R expects to find the local code
 # e.g "1code_readTSGdata/readflowdata.R"
