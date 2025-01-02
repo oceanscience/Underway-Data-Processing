@@ -81,7 +81,7 @@ library(readr)
 library(oce)
 
 #CTD pressure for comparison with TSG intake depth, typically between 4 - 8 m
-CTDpres <- 7
+CTDpres <- Sys.getenv("CTDpres")
 
 # this is the directory where R expects to find the local code
 # e.g "1code_readTSGdata/readflowdata.R"
@@ -98,7 +98,7 @@ if(!dir.exists(file.path(pathout))) {
 
 pathelog<- Sys.getenv("Elog_Directory")
 pathctd <- Sys.getenv("ODF_Directory")
-samples_directory <- Sys.getenv("ODF_Directory")
+samples_directory <- Sys.getenv("Bottle_data")
 
 #List of Functions
 source("4comparesamples/read_elog_tsg3.R")
