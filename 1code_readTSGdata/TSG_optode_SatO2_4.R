@@ -10,6 +10,7 @@
 #Salinity[PSU]	0.00
 #PhaseCoef	0.000000E+00	1.000000E+00	0.000000E+00	0.000000E+00
 #FoilID	1207M
+#*************** Update Calibration Coefficients each mission!!!!********************
 
 read.tsgcalphase <- function(tsgdata) {
   #rm(list=ls())
