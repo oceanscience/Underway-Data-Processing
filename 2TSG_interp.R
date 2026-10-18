@@ -97,7 +97,7 @@ source("2code_interp_plot_TSGdata/plot_tsg.R")
 
 # list the processed log files from TSG including path from the processed folder
 filesflow <- list.files(path= pathprocessed, pattern = 'FLOWdata.*\\.csv', full.names = TRUE)
-filespco2 <- list.files(path= pathprocessed, pattern = 'PCO2data.*\\.csv', full.names = TRUE)
+filespco2 <- list.files(path= pathprocessed, pattern = 'PCO2data.*\\.csv', full.names = TRUE) # only used if there is pCO2
 filestsg <- list.files(path= pathprocessed, pattern = 'TSGdata.*\\.csv', full.names = TRUE)
 filesnmea <- list.files(path= pathprocessed, pattern = 'TSGposition.*\\.csv', full.names = TRUE)
 
@@ -131,7 +131,7 @@ if(length(filesflow) > 0) {
   flowalle <- data.frame(read.csv(filesflow[length(filesflow)], header = TRUE))
   t_flowalle = if( exists("flowalle")) flowalle$time[length(flowalle$time)]
 }
-
+## only for pCO2
 if(length(filespco2) > 0) {
   pco2all <- data.frame(read.csv(filespco2[1], header = TRUE))
   t_pco2all = if( exists("pco2all")) pco2all$time[1]
@@ -162,7 +162,7 @@ hourrate <- seq(from = as.POSIXct(start_date,tz = 'UTC'), to = as.POSIXct(end_da
 if(length(filestsg) > 0) assemble.TSG(hourly_processed_data, filestsg, hourrate, missionnum)
 if(length(filesnmea) > 0) assemble.TSG(hourly_processed_data, filesnmea, hourrate, missionnum)
 if(length(filesflow) > 0) assemble.TSG(hourly_processed_data, filesflow, hourrate, missionnum)
-if(length(filespco2) > 0) assemble.TSG(hourly_processed_data, filespco2, hourrate, missionnum)
+if(length(filespco2) > 0) assemble.TSG(hourly_processed_data, filespco2, hourrate, missionnum) # only used for pCO2
 
 filesinterp <- list.files(path=hourly_processed_data, pattern = 'TSG_.*\\.csv', full.names = TRUE)
 interpdataall <- data.frame(read.csv(filesinterp[1], header = TRUE))
