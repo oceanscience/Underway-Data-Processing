@@ -109,8 +109,8 @@ source("4comparesamples/ctd_tsg_compare4.R")
 
 # read and process data
 read.elog_tsg(pathout, pathelog, samples_directory)
-read.elog_tsg_pco2(pathelog, pathprocessed, samples_directory)
-read.addPCO2(pathprocessed) 
+#read.elog_tsg_pco2(pathelog, pathprocessed, samples_directory) # only run if you have pCO2
+#read.addPCO2(pathprocessed) # only run if you have pCO2
 read.tsg_ctd(pathctd, CTDpres)
 read.ctd_tsg_compare4(pathprocessed)
 
