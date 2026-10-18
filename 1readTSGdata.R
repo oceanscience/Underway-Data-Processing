@@ -69,17 +69,20 @@ source("1code_readTSGdata/readflowdata.R")
 source("1code_readTSGdata/readFLOW.R")
 source("1code_readTSGdata/readnmeadata.R")
 source("1code_readTSGdata/readNMEA.R")
-source("1code_readTSGdata/readpco2data.R")
-source("1code_readTSGdata/readpco2_2.R")
+source("1code_readTSGdata/readpco2data.R") # only needed for pCO2
+source("1code_readTSGdata/readpco2_2.R") # only needed for pCO2
 source("1code_readTSGdata/readtsgdata.R")
 source("1code_readTSGdata/readTSGout.R")
-source("1code_readTSGdata/TSG_optode_SatO2_4.R")
+source("1code_readTSGdata/TSG_optode_SatO2_4.R") #Need to update calibration coefficients
+source("1code_readTSGdata/readnmeashipspeed.R")
+source("1code_readTSGdata/readNMEAfileshipspeed.R")
 
 # read and process data
 read.flowdata(pathrawdata, pathprocesseddata)
 read.nmeadata(pathrawdata, pathprocesseddata)
-read.pco2data(pathrawdata, pathprocesseddata)
+read.pco2data(pathrawdata, pathprocesseddata) # only needed for pCO2
 read.tsgdata(pathrawdata, pathprocesseddata)
+read.nmeashipspeed(pathrawdata, pathprocesseddata)
 
 # Record session information
 sink_dir <- file.path(pathprocesseddata, 'session_info.txt')
