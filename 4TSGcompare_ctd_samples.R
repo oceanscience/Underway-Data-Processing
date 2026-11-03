@@ -82,8 +82,8 @@ library(oce)
 library(dplyr)
 
 #CTD pressure for comparison with TSG intake depth, typically between 4 - 8 m
-path_to_Renviron_file <- "C:/codasshared/AtSea/TSG/JC28302_test/.REnviron"
-readRenviron(path_to_Renviron_file) 
+#path_to_Renviron_file <- "/.REnviron"
+#readRenviron(path_to_Renviron_file) 
 
 CTDpres <- Sys.getenv("CTDpres")
 
